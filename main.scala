@@ -19,7 +19,9 @@ object App {
     val files = Array("dota2Train5000.csv", 
 "dota2Train10000.csv", 
 "dota2Train25000.csv", 
+"dota2Train37500.csv", 
 "dota2Train50000.csv", 
+"dota2Train62500.csv", 
 "dota2Train75000.csv", 
 "dota2Train.csv");
 
