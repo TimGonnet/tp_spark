@@ -7,14 +7,37 @@ import org.apache.spark.mllib.tree.impurity.Gini
 
 object App {
   def main(): Unit = {
-    exoMono(5, 1)
+    //exoMono(5, 1)
+    exoMulti(5)
   }
   def test(): Unit = {
     println("Hello, world!")
   }
 
-  def exoMulti(nbCores: Int, nbIte: Int): Unit = {
+  def exoMulti(nbIte: Int): Unit = {
+    val nbCores = Array(1,2,3,4,8,16,32)
+    val file = "dota2Train.csv"
 
+    for(nbCore <- nbCores) {
+      // Load and parse the data file
+      val train = sc.textFile("data/"+file,nbCore)
+      val parsedTrain = train.map { line =>
+        val parts = line.split(',').map(_.toDouble)
+        LabeledPoint(parts(0)*0.5+0.5, Vectors.dense(parts.tail).toSparse) // *0.5+0.5 to avoid negative values
+      }
+
+      // One empty training to warn up
+      var model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
+
+      // BUILD MODEL
+      val t0 = System.nanoTime()
+      for(i <- 1 to nbIte) {
+        model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
+      }
+      val t1 = System.nanoTime()
+      println(nbCore + "cores : " + ((t1 - t0)/1000000/nbIte) + "ms")
+
+    }
   }
 
   def exoMono(nbIte: Int, nbPartitions: Int): Unit = {
