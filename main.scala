@@ -26,7 +26,7 @@ object App {
 
     for(file <- files){
       // READ FILE
-      println(file)
+      println(file + " : (size data / size test), (dt learn), (dt test) ")
       // Load and parse the data file
       val train = sc.textFile("data/"+file,nbPartition)
       val parsedTrain = train.map { line =>
@@ -38,6 +38,7 @@ object App {
         val parts = line.split(',').map(_.toDouble)
         LabeledPoint(parts(0)*0.5+0.5, Vectors.dense(parts.tail).toSparse)
       }
+      print( "(" + parsedTrain.count() + " / " + parsedTest.count() + "), ")
 
       // One empty training to warn up
       var model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
@@ -48,7 +49,7 @@ object App {
         model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
       }
       val t1 = System.nanoTime()
-      println("Model : " + (((t1 - t0)/1000000)/nbIte) + "ms")
+      print( ((t1 - t0)/1000000/nbIte) + "ms, ")
 
       // Evaluate model on training examples and compute training error
 
@@ -66,7 +67,7 @@ object App {
         }
       }
       val t3 = System.nanoTime()
-      println("Predictions : " + (((t3 - t2)/1000000)/nbIte) + "ms")
+      println( ((t3 - t2)/1000000/nbIte) + "ms")
   
       val MSE = valuesAndPreds.map{ case(v, p) => math.pow((v - p), 2)}.mean()
       println("training Mean Squared Error = " + MSE)
