@@ -28,7 +28,7 @@ object App {
       "dota2Train.csv");
 
 
-    println(file + " : (size data / size test), (dt learn), (dt test), (Mean Squared Error )")
+    println("(size data / size test), (dt learn), (dt test), (Mean Squared Error )")
     for(file <- files){
       // READ FILE
       // Load and parse the data file
