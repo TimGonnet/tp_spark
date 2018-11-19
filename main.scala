@@ -14,12 +14,12 @@ object App {
   }
 
   def exo(): Unit = {
-   val nbIte = 10;
+   val nbIte = 5;
 
     // READ FILES
 
     // Load and parse the data file
-    val train = sc.textFile("data/dota2Test.csv")
+    val train = sc.textFile("data/dota2Train.csv")
     val parsedTrain = train.map { line =>
       val parts = line.split(',').map(_.toDouble)
       LabeledPoint(parts(0)*0.5+0.5, Vectors.dense(parts.tail).toSparse) // *0.5+0.5 to avoid negative values
@@ -30,7 +30,7 @@ object App {
       LabeledPoint(parts(0)*0.5+0.5, Vectors.dense(parts.tail).toSparse)
     }
 
-    println("Here I am! " + parsedTrain.count())
+    println("Data loaded, start learning")
 
 
     // BUILD MODEL
@@ -41,6 +41,7 @@ object App {
     }
     val t1 = System.nanoTime()
     println("Time for model : " + (((t1 - t0)/1000000)/nbIte) + "ms")
+
 
 /*
     // CHECK PREDICTION
@@ -54,6 +55,8 @@ object App {
 */
 
     // Evaluate model on training examples and compute training error
+
+    println("Data loaded, start predict")
 
     val t2 = System.nanoTime()
     var valuesAndPreds = parsedTest.map { point =>
