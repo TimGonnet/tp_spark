@@ -17,7 +17,7 @@ object App {
 
   }
 
-  def exoMono(int nbIte, nbPartitions): Unit = {
+  def exoMono(nbIte: Int, nbPartitions: Int): Unit = {
     val files = Array("dota2Train5000.csv", 
       "dota2Train10000.csv", 
       "dota2Train25000.csv", 
