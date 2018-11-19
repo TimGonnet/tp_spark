@@ -7,30 +7,32 @@ import org.apache.spark.mllib.tree.impurity.Gini
 
 object App {
   def main(): Unit = {
-    exoMono()
+    exoMono(5, 1)
   }
   def test(): Unit = {
     println("Hello, world!")
   }
 
-  def exoMono(): Unit = {
-    val nbIte = 5;
-    val nbPartition = 1;
+  def exoMulti(nbCores: Int, nbIte: Int): Unit = {
+
+  }
+
+  def exoMono(int nbIte, nbPartitions): Unit = {
     val files = Array("dota2Train5000.csv", 
-"dota2Train10000.csv", 
-"dota2Train25000.csv", 
-"dota2Train37500.csv", 
-"dota2Train50000.csv", 
-"dota2Train62500.csv", 
-"dota2Train75000.csv", 
-"dota2Train.csv");
+      "dota2Train10000.csv", 
+      "dota2Train25000.csv", 
+      "dota2Train37500.csv", 
+      "dota2Train50000.csv", 
+      "dota2Train62500.csv", 
+      "dota2Train75000.csv", 
+      "dota2Train.csv");
 
 
+    println(file + " : (size data / size test), (dt learn), (dt test), (Mean Squared Error )")
     for(file <- files){
       // READ FILE
-      println(file + " : (size data / size test), (dt learn), (dt test), (Mean Squared Error )")
       // Load and parse the data file
-      val train = sc.textFile("data/"+file,nbPartition)
+      val train = sc.textFile("data/"+file,nbPartitions)
       val parsedTrain = train.map { line =>
         val parts = line.split(',').map(_.toDouble)
         LabeledPoint(parts(0)*0.5+0.5, Vectors.dense(parts.tail).toSparse) // *0.5+0.5 to avoid negative values
