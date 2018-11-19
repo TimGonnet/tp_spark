@@ -1,0 +1,6 @@
+Start master : ./sbin/start-master.sh
+Start slaves : /start-slave.sh <master-spark-URL>
+Connect app to cluster : ./bin/spark-shell --master spark://IP:PORT --total-exe$
+
+Start script : ../spark-2.4.0-bin-hadoop2.7/bin/spark-shell -i main.scala
+Run App : App.main
