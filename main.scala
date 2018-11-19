@@ -28,7 +28,7 @@ object App {
 
     for(file <- files){
       // READ FILE
-      println(file + " : (size data / size test), (dt learn), (dt test) ")
+      println(file + " : (size data / size test), (dt learn), (dt test), (Mean Squared Error )")
       // Load and parse the data file
       val train = sc.textFile("data/"+file,nbPartition)
       val parsedTrain = train.map { line =>
@@ -69,10 +69,10 @@ object App {
         }
       }
       val t3 = System.nanoTime()
-      println( ((t3 - t2)/1000000/nbIte) + "ms")
+      print( ((t3 - t2)/1000000/nbIte) + "ms, ")
   
       val MSE = valuesAndPreds.map{ case(v, p) => math.pow((v - p), 2)}.mean()
-      println("training Mean Squared Error = " + MSE)
+      println(MSE)
     }
   }
 }
