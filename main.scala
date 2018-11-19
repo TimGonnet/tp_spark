@@ -14,12 +14,13 @@ object App {
   }
 
   def exo(): Unit = {
-   val nbIte = 5;
+    val nbIte = 5;
+    val nbPartition = 2;
 
     // READ FILES
 
     // Load and parse the data file
-    val train = sc.textFile("data/dota2Train.csv")
+    val train = sc.textFile("data/dota2Train.csv", 2)
     val parsedTrain = train.map { line =>
       val parts = line.split(',').map(_.toDouble)
       LabeledPoint(parts(0)*0.5+0.5, Vectors.dense(parts.tail).toSparse) // *0.5+0.5 to avoid negative values
