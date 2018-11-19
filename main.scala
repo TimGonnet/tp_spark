@@ -15,12 +15,13 @@ object App {
 
   def exoMono(): Unit = {
     val nbIte = 5;
-    val nbPartition = 2;
+    val nbPartition = 1;
     val files = Array("dota2Train5000.csv", 
 "dota2Train10000.csv", 
 "dota2Train25000.csv", 
 "dota2Train50000.csv", 
-"dota2Train75000.csv");
+"dota2Train75000.csv", 
+"dota2Train.csv");
 
 
     for(file <- files){
@@ -38,10 +39,12 @@ object App {
         LabeledPoint(parts(0)*0.5+0.5, Vectors.dense(parts.tail).toSparse)
       }
 
+      // One empty training to warn up
+      var model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
+
       // BUILD MODEL
       val t0 = System.nanoTime()
-      var model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
-      for(i <- 2 to nbIte) {
+      for(i <- 1 to nbIte) {
         model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
       }
       val t1 = System.nanoTime()
@@ -49,12 +52,14 @@ object App {
 
       // Evaluate model on training examples and compute training error
 
-      val t2 = System.nanoTime()
+      // One empty training to warn up
       var valuesAndPreds = parsedTest.map { point =>
           val prediction = model.predict(point.features)
           (point.label, prediction)
         }
-      for(i <- 2 to nbIte) {
+
+      val t2 = System.nanoTime()
+      for(i <- 1 to nbIte) {
         valuesAndPreds = parsedTest.map { point =>
           val prediction = model.predict(point.features)
           (point.label, prediction)
