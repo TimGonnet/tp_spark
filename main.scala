@@ -33,13 +33,14 @@ object App {
 
 
 
-
     println("learning...")
     val model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
 
+
     println("Predicting...")
     val predic = model.predict(parsedTest.first().features)
-    print(predic)
+    val result = (predict-0.5)*2
+    print(result)
   }
 
   def exoMulti(nbIte: Int): Unit = {
