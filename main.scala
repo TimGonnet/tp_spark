@@ -7,15 +7,18 @@ import org.apache.spark.mllib.tree.impurity.Gini
 
 object App {
   def main(): Unit = {
+    val numWorkers = sc.getExecutorMemoryStatus.size -1
+    println("execute on " + numWorkers + " nodes")
     //exoMono(5, 1)
     exoMulti(5)
+
   }
   def test(): Unit = {
     println("Hello, world!")
   }
 
   def exoMulti(nbIte: Int): Unit = {
-    val nbCores = Array(1,2,3,4,8,16,32)
+    val nbCores = Array(1,2,3,4,5,6,7,8,10,12,14,16,20,24,28,32)
     val file = "dota2Train.csv"
 
     for(nbCore <- nbCores) {
