@@ -10,11 +10,36 @@ object App {
     val numWorkers = sc.getExecutorMemoryStatus.size -1
     println("execute on " + numWorkers + " nodes")
     //exoMono(5, 1)
-    exoMulti(5)
-
+    //exoMulti(5)
+    demo(6)
   }
-  def test(): Unit = {
-    println("Hello, world!")
+
+  def demo(nbPartitions: Int): Unit = {
+    val file = "demo.csv"
+    val trainFile = "dota2Train.csv"
+    print("Will read file : ./data/" + file)
+    
+    print("reading...")
+    val train = sc.textFile("data/"+trainFile,nbPartitions)
+    val parsedTrain = train.map { line =>
+      val parts = line.split(',').map(_.toDouble) 
+         LabeledPoint(parts(0)*0.5+0.5, Vectors.dense(parts.tail).toSparse) // *0.5+0.5 to avoid negative values
+    }
+    val test = sc.textFile("data/"+file)
+    val parsedTest = test.map { line =>
+      val parts = line.split(',').map(_.toDouble)
+        LabeledPoint(-10, Vectors.dense(parts.tail).toSparse) // we set a fake label 
+    }
+
+
+
+
+    print("learning...")
+    val model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
+
+    print("Predicting...")
+    val predic = model.predict(parsedTest.first().features)
+    print(predic)
   }
 
   def exoMulti(nbIte: Int): Unit = {
