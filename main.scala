@@ -16,10 +16,10 @@ object App {
 
   def demo(nbPartitions: Int): Unit = {
     val file = "demo.csv"
-    val trainFile = "dota2Train.csv"
-    print("Will read file : ./data/" + file)
+    val trainFile = "dota2Train75000.csv"
+    println("Will read file : ./data/" + file)
     
-    print("reading...")
+    println("reading...")
     val train = sc.textFile("data/"+trainFile,nbPartitions)
     val parsedTrain = train.map { line =>
       val parts = line.split(',').map(_.toDouble) 
@@ -34,10 +34,10 @@ object App {
 
 
 
-    print("learning...")
+    println("learning...")
     val model = DecisionTree.train(parsedTrain, Classification, Gini, 20)
 
-    print("Predicting...")
+    println("Predicting...")
     val predic = model.predict(parsedTest.first().features)
     print(predic)
   }
