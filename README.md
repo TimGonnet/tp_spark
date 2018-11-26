@@ -11,4 +11,7 @@ Instructions pour executer le code :
 Code executé :
 main.scala
 
+Résultats:
+Curves.ods
+
 Lien des données: http://archive.ics.uci.edu/ml/datasets/Dota2+Games+Results
