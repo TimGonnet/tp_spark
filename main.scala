@@ -39,7 +39,7 @@ object App {
 
     println("Predicting...")
     val predic = model.predict(parsedTest.first().features)
-    val result = (predict-0.5)*2
+    val result = (predic-0.5)*2
     print(result)
   }
 
